@@ -1,7 +1,10 @@
 #!/usr/bin/python3.9.7
 import discord
 import os
+import state
+from state import init_state
 from dotenv import load_dotenv
+from modules.downtime import downtime
 
 load_dotenv()
 client = discord.Client()
@@ -10,12 +13,19 @@ client = discord.Client()
 @client.event
 async def on_ready():
     print('{0.user}'.format(client) + ' logged in!')
+    init_state()
 
 # Message Responses
 @client.event
 async def on_message(message):
     if message.author == client.user:
         return
-    await message.channel.send("hello world")
+
+    state.message = message
+
+    if "$downtime" in message.content:
+        await downtime()
+
+    state.message = {}
 
 client.run(os.getenv('TOKEN'))
