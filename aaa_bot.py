@@ -2,9 +2,15 @@
 import discord
 import os
 import state
+import json
 from state import init_state
 from dotenv import load_dotenv
-from modules.downtime import downtime
+from router.router import admin_router, user_router
+
+# Gmail auth
+from quickstart import main
+service = main()
+
 
 load_dotenv()
 client = discord.Client()
@@ -23,8 +29,11 @@ async def on_message(message):
 
     state.message = message
 
-    if "$downtime" in message.content:
-        await downtime()
+    if message.author.id in json.loads(os.getenv("ADMIN_ID_LIST")):
+        await admin_router()
+    
+    else:
+        await user_router()
 
     state.message = {}
 

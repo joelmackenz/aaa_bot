@@ -1,4 +1,4 @@
-from functions.functions import send, send_private_msg
+from internal_functions.functions import send, send_private_msg
 import discord
 import state
 client = discord.Client()
