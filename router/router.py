@@ -1,12 +1,15 @@
 import state
 from internal_functions.functions import send
 from modules.downtime import downtime
+from modules.house_rules import house_rules
+from modules.XP_rewards import xp_rewards
 from modules.emailer.schedule_reminder_email import send_schedule_reminder_email
 
 
 async def admin_router():
     if "$email" in state.message.content:
         try:
+            await send("Processing emails. . .")
             send_schedule_reminder_email()
             await send("Emails sent!")
         except IndexError:
@@ -20,13 +23,14 @@ async def admin_router():
             print("Exception:")
             print(e)
             await send('Email error. Please contact Joel. (Exception printed to console.)')
+    await user_router()
 
 
 async def user_router():
     if "$downtime" in state.message.content:
         await downtime()
-    # elif "$houserules" in state.message.content:
-    #     await house_rules()
-    # elif "$xprewards" in state.message.content:
-    #     await xp_rewards()
+    elif "$houserules" in state.message.content or "$rules" in state.message.content:
+        await house_rules()
+    elif "$xp" in state.message.content:
+        await xp_rewards()
 
