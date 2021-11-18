@@ -3,6 +3,7 @@ from internal_functions.functions import send
 from modules.downtime import downtime
 from modules.house_rules import house_rules
 from modules.XP_rewards import xp_rewards
+from modules.fun_fact import fun_fact
 from modules.emailer.schedule_reminder_email import send_schedule_reminder_email
 
 
@@ -33,4 +34,6 @@ async def user_router():
         await house_rules()
     elif "$xp" in state.message.content:
         await xp_rewards()
+    elif "$fun" in state.message.content:
+        await fun_fact()
 
