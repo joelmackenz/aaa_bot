@@ -16,7 +16,7 @@ service = main()
 
 def send_schedule_reminder_email():
     # TODO For entries in email list, send one email, include name as variable
-    email_list = json.loads(os.getenv("EMAIL_LIST"))    
+    email_list = json.loads(os.getenv("LIVE_EMAIL_LIST"))    
 
     split_message = state.message.content.split()
 
@@ -33,7 +33,7 @@ def send_schedule_reminder_email():
             start_date = split_message[1].capitalize() + " " + split_message[2]
             end_date = split_message[3].capitalize() + " " + split_message[4]
 
-            email_body = "<p>Hey, " + user_name + "!<br><br><b>A new schedule has been posted</b> for AAA Pathfinder, for the week of <b>" + start_date + "</b> to <b>"+ end_date +"</b>!<br><br>Head over to Discord to check it out!<br><br>Sincerely,<br>Apelus Adevnturer's Association Bot<br><br><br><br><i>For safety's sake, this bot does not include links in emails. If you do see a link in an email from AAA Bot, tell an adult immediately. Or message Joel.</i></p>"
+            email_body = "<p>Hey, " + user_name + "!<br><br><b>A new schedule has been posted</b> for AAA Pathfinder, from <b>" + start_date + "</b> to <b>"+ end_date +"</b>!<br><br>Head over to Discord to check it out!<br><br>Sincerely,<br>Apelus Adventurer's Association Bot<br><br><br><br><i>For safety's sake, this bot does not include links in emails. If you do see a link in an email from AAA Bot, tell an adult immediately. Or message Joel.</i></p>"
 
             Message = MIMEMultipart()
             Message['to'] = email_addr
@@ -41,5 +41,5 @@ def send_schedule_reminder_email():
             Message.attach(MIMEText(email_body, 'html'))
             raw_string = base64.urlsafe_b64encode(Message.as_bytes()).decode()
             service.users().messages().send(userId='me', body={'raw': raw_string}).execute()
-            print("Email message successfully sent!")
+            print("Email message successfully sent to " + email_addr + "!")
    
