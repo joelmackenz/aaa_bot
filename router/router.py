@@ -5,10 +5,21 @@ from modules.house_rules import house_rules
 from modules.XP_rewards import xp_rewards
 from modules.fun_fact import fun_fact
 from modules.emailer.schedule_reminder_email import send_schedule_reminder_email
+from modules.emailer.custom_email import send_custom_email
 
 
 async def admin_router():
-    if "$email" in state.message.content:
+    if "$email-custom" in state.message.content:
+        # await send("Are you sure you want to send this custom email?")
+        try:
+            await send("Processing emails. . .")
+            send_custom_email()
+            await send("Emails sent!")
+        except Exception as e:
+            print("Exception:")
+            print(e)
+            await send('Email error. Please contact Joel. (Exception printed to console.)')
+    elif "$email" in state.message.content:
         try:
             await send("Processing emails. . .")
             send_schedule_reminder_email()
